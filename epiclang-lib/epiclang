@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# This script ensures that epiclang is run with at least Python 3.11
+
+PYTHON_VERSIONS=(python3.13 python3.12 python3.11)
+
+PYTHON_CMD=""
+for version in "${PYTHON_VERSIONS[@]}"; do
+    if command -v "$version" >/dev/null 2>&1; then
+        PYTHON_CMD="$version"
+        break
+    fi
+done
+
+if [ -z "$PYTHON_CMD" ]; then
+    echo "Error: No suitable Python version found (${PYTHON_VERSIONS[*]})" >&2
+    exit 1
+fi
+
+exec "$PYTHON_CMD" "$(dirname "$0")/epiclang.py" "$@"
